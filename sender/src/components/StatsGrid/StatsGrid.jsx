@@ -1,7 +1,7 @@
 import React from 'react';
 import './StatsGrid.css';
 
-const StatsGrid = ({ data }) => {
+const StatsGrid = ({ data, sentStats }) => {
   if (!data || data.length === 0) return null;
   
   const totalRevenue = data.reduce((sum, row) => sum + parseFloat(row['Revenue'] || 0), 0);
@@ -22,6 +22,18 @@ const StatsGrid = ({ data }) => {
         <div className="stat-number">${avgAOV.toFixed(2)}</div>
         <div className="stat-label">Average AOV</div>
       </div>
+      {sentStats.sent > 0 && (
+        <div className="stat-card">
+          <div className="stat-number" style={{ color: '#047857' }}>{sentStats.sent}</div>
+          <div className="stat-label">Emails Sent</div>
+        </div>
+      )}
+      {sentStats.failed > 0 && (
+        <div className="stat-card">
+          <div className="stat-number" style={{ color: '#dc2626' }}>{sentStats.failed}</div>
+          <div className="stat-label">Failed to Send</div>
+        </div>
+      )}
     </div>
   );
 };
