@@ -1,21 +1,14 @@
-import React, { useEffect, useState } from 'react';
+// src/components/PreviewSection/PreviewSection.jsx
+import React from 'react';
 import StatsGrid from '../StatsGrid/StatsGrid';
 import PreviewTable from '../PreviewTable/PreviewTable';
 import EmailPreview from '../EmailPreview/EmailPreview';
 import EmailLog from '../EmailLog/EmailLog';
 import './PreviewSection.css';
 
-const PreviewSection = ({ csvData, isSending, onSendEmails, emailLogs }) => {
-  const [sentStats, setSentStats] = useState({ sent: 0, failed: 0 });
+const PreviewSection = ({ csvData, isSending, emailLogs, onSendEmails, sentStats }) => {
   const firstMerchant = csvData.length > 0 ? csvData[0] : null;
   
-  useEffect(() => {
-    // Update stats when emailLogs change
-    const sent = emailLogs.filter(log => log.status === 'sent').length;
-    const failed = emailLogs.filter(log => log.status === 'failed').length;
-    setSentStats({ sent, failed });
-  }, [emailLogs]);
-
   return (
     <div className="preview-section">
       <h3>📊 Data Preview</h3>

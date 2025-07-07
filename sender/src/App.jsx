@@ -1,3 +1,4 @@
+// src/App.jsx
 import React, { useState } from 'react';
 import Papa from 'papaparse';
 import axios from 'axios';
@@ -7,9 +8,10 @@ import ProgressSection from './components/ProgressSection/ProgressSection';
 import PreviewSection from './components/PreviewSection/PreviewSection';
 import './index.css';
 
+// Create an axios instance with base URL
 const api = axios.create({
   baseURL: 'http://localhost:5001',
-  timeout: 10000,
+  timeout: 30000, // Increase timeout to 30 seconds
 });
 
 function App() {
@@ -93,6 +95,15 @@ function App() {
           type: 'success', 
           message: response.data.message 
         });
+        
+        // Update email logs from response
+        setEmailLogs(response.data.emailLogs || []);
+        
+        // Update stats
+        setSentStats({
+          sent: response.data.stats?.sent || 0,
+          failed: response.data.stats?.failed || 0
+        });
       } else {
         setStatus({ 
           type: 'error', 
@@ -106,6 +117,11 @@ function App() {
       if (error.response) {
         // Server responded with an error status (4xx, 5xx)
         errorMessage = error.response.data.message || errorMessage;
+        
+        // Try to get logs from error response
+        if (error.response.data.emailLogs) {
+          setEmailLogs(error.response.data.emailLogs);
+        }
       } else if (error.request) {
         // Request was made but no response received
         errorMessage = 'No response from server. Is the backend running?';
@@ -137,6 +153,7 @@ function App() {
             isSending={isSending}
             emailLogs={emailLogs}
             onSendEmails={sendEmails}
+            sentStats={sentStats}
           />
         )}
       </div>
