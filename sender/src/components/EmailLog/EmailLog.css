@@ -1,0 +1,38 @@
+.email-log {
+    max-height: 300px;
+    overflow-y: auto;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 20px;
+}
+
+.email-log-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.email-log-item:last-child {
+    border-bottom: none;
+}
+
+.email-status {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.email-sent {
+    background: #ecfdf5;
+    color: #047857;
+}
+
+.email-failed {
+    background: #fef2f2;
+    color: #dc2626;
+}

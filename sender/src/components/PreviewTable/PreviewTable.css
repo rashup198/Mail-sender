@@ -1,0 +1,26 @@
+.preview-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.preview-table th,
+.preview-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.preview-table th {
+    background: #f8fafc;
+    font-weight: 600;
+    color: #374151;
+}
+
+.preview-table tr:hover {
+    background: #f8fafc;
+}

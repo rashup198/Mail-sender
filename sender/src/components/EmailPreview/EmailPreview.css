@@ -1,0 +1,26 @@
+.email-preview {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 20px;
+    font-family: Georgia, serif;
+    line-height: 1.6;
+}
+
+.email-preview h3 {
+    color: #1f2937;
+    margin-bottom: 15px;
+}
+
+.metrics-box {
+    background: #f0f4ff;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+.metrics-box h4 {
+    color: #4f46e5;
+    margin-bottom: 15px;
+}
