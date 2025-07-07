@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
 import Papa from 'papaparse';
+import axios from 'axios';
 import Header from './components/Header/Header';
 import UploadSection from './components/UploadSection/UploadSection';
 import ProgressSection from './components/ProgressSection/ProgressSection';
 import PreviewSection from './components/PreviewSection/PreviewSection';
 import './index.css';
+
+const api = axios.create({
+  baseURL: 'http://localhost:5001',
+  timeout: 10000,
+});
 
 function App() {
   const [csvData, setCsvData] = useState([]);
@@ -12,6 +18,7 @@ function App() {
   const [status, setStatus] = useState({ type: '', message: '' });
   const [isSending, setIsSending] = useState(false);
   const [emailLogs, setEmailLogs] = useState([]);
+  const [sentStats, setSentStats] = useState({ sent: 0, failed: 0 });
 
   const handleFileSelect = (file) => {
     if (!file.name.endsWith('.csv')) {
@@ -71,40 +78,47 @@ function App() {
     setProgress(100);
   };
 
-  const sendEmails = () => {
+  const sendEmails = async () => {
     setIsSending(true);
     setEmailLogs([]);
+    setSentStats({ sent: 0, failed: 0 });
     
-    let processedCount = 0;
-    const totalEmails = csvData.length;
-    
-    const processNextEmail = () => {
-      if (processedCount >= totalEmails) {
-        setIsSending(false);
-        setStatus({ type: 'success', message: `All emails sent successfully to ${totalEmails} merchants!` });
-        return;
+    try {
+      const response = await api.post('/send-emails', {
+        csvData
+      });
+      
+      if (response.data.success) {
+        setStatus({ 
+          type: 'success', 
+          message: response.data.message 
+        });
+      } else {
+        setStatus({ 
+          type: 'error', 
+          message: response.data.message 
+        });
+      }
+    } catch (error) {
+      console.error('Error sending emails:', error);
+      let errorMessage = 'Failed to send emails';
+      
+      if (error.response) {
+        // Server responded with an error status (4xx, 5xx)
+        errorMessage = error.response.data.message || errorMessage;
+      } else if (error.request) {
+        // Request was made but no response received
+        errorMessage = 'No response from server. Is the backend running?';
       }
       
-      const merchant = csvData[processedCount];
-      const success = Math.random() < 0.95;
-      
-      setTimeout(() => {
-        setEmailLogs(prev => [
-          ...prev,
-          {
-            brandName: merchant['Brand Name'],
-            email: merchant['Email'],
-            status: success ? 'sent' : 'failed'
-          }
-        ]);
-        
-        processedCount++;
-        setProgress((processedCount / totalEmails) * 100);
-        processNextEmail();
-      }, Math.random() * 1000 + 500);
-    };
-    
-    processNextEmail();
+      setStatus({ 
+        type: 'error', 
+        message: errorMessage 
+      });
+    } finally {
+      setIsSending(false);
+      setProgress(100);
+    }
   };
 
   return (
