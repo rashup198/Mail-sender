@@ -20,8 +20,8 @@ const PreviewTable = ({ data }) => {
           <tr key={index}>
             {headers.map(header => {
               let value = row[header];
-              if (header === 'Revenue') value = '$' + parseFloat(value).toLocaleString();
-              if (header === 'AOV') value = '$' + parseFloat(value).toFixed(2);
+              if (header === 'Revenue') value = '₹' + parseFloat(value).toLocaleString();
+              if (header === 'AOV') value = '₹' + parseFloat(value).toFixed(2);
               if (header === '% Contribution') value = parseFloat(value).toFixed(2) + '%';
               return <td key={header}>{value}</td>;
             })}
